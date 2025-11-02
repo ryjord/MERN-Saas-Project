@@ -46,8 +46,6 @@ app.use("/sales", salesRoutes);
 // Mongoose Setup
 const PORT = process.env.PORT || 9000;
 mongoose.connect(process.env.MONGO_URL).then(() => {
-    app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
-
     // Data KEEP THIS COMMENTED OUT
     //AffiliateStat.insertMany(dataAffiliateStat);
     //OverallStat.insertMany(dataOverallStat);
@@ -57,3 +55,5 @@ mongoose.connect(process.env.MONGO_URL).then(() => {
     //User.insertMany(dataUser);
 
 }).catch((error) => console.log(`${error} did not connect`));
+
+export default app;
