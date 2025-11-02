@@ -13,18 +13,6 @@ import generalRoutes from "./routes/general.js";
 import managementRoutes from "./routes/management.js";
 import salesRoutes from "./routes/sales.js";
 
-// import data models
-import User from "./models/User.js";
-import Product from "./models/Product.js";
-import ProductStat from "./models/ProductStat.js";
-import OverallStat from "./models/OverallStat.js";
-import Transaction from "./models/Transaction.js";
-import AffiliateStat from "./models/AffiliateStat.js";
-
-// import data
-import { dataUser, dataProduct, dataProductStat, dataOverallStat, dataAffiliateStat, dataTransaction } from "./data/index.js";   
-
-
 // Configurations
 dotenv.config();
 const app = express();
@@ -43,17 +31,35 @@ app.use("/general", generalRoutes);
 app.use("/management", managementRoutes);
 app.use("/sales", salesRoutes);
 
+// Health check route - IMPORTANT!
+app.get("/", (req, res) => {
+  res.json({ 
+    message: "API is running!",
+    timestamp: new Date().toISOString(),
+    status: "active"
+  });
+});
+
 // Mongoose Setup
 const PORT = process.env.PORT || 9000;
-mongoose.connect(process.env.MONGO_URL).then(() => {
-    // Data KEEP THIS COMMENTED OUT
-    //AffiliateStat.insertMany(dataAffiliateStat);
-    //OverallStat.insertMany(dataOverallStat);
-    //Product.insertMany(dataProduct);
-    //ProductStat.insertMany(dataProductStat);
-    //Transaction.insertMany(dataTransaction);
-    //User.insertMany(dataUser);
 
-}).catch((error) => console.log(`${error} did not connect`));
+// Connect to MongoDB and start server
+const startServer = async () => {
+  try {
+    if (process.env.MONGO_URL) {
+      await mongoose.connect(process.env.MONGO_URL);
+      console.log("Connected to MongoDB");
+    }
+    
+    // For Vercel, we need to export the app without listening
+    // Vercel will handle the listening
+    console.log("Server configured successfully");
+  } catch (error) {
+    console.log(`${error} did not connect`);
+  }
+};
 
+startServer();
+
+// Export for Vercel serverless
 export default app;
