@@ -17,13 +17,26 @@ import salesRoutes from "./routes/sales.js";
 dotenv.config();
 const app = express();
 
+// CORS configuration - FIXED
+app.use(cors({
+  origin: [
+    "https://mern-saas-project-frontend.vercel.app",
+    "http://localhost:3000",
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "x-auth-token"]
+}));
+
+// Handle preflight requests - FIXED (remove the problematic line)
+// The cors middleware already handles OPTIONS requests automatically
+
 app.use(express.json());
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(morgan("common"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cors());
 
 // Routes Setup
 app.use("/client", clientRoutes);
@@ -31,12 +44,21 @@ app.use("/general", generalRoutes);
 app.use("/management", managementRoutes);
 app.use("/sales", salesRoutes);
 
-// Health check route - IMPORTANT!
+// Health check route
 app.get("/", (req, res) => {
   res.json({ 
     message: "API is running!",
     timestamp: new Date().toISOString(),
-    status: "active"
+    status: "active",
+    frontend: "https://mern-saas-project-frontend.vercel.app"
+  });
+});
+
+// Test route specifically for frontend
+app.get("/api/test", (req, res) => {
+  res.json({ 
+    message: "Backend is connected to frontend!",
+    frontend: "mern-saas-project-frontend.vercel.app"
   });
 });
 
@@ -51,11 +73,14 @@ const startServer = async () => {
       console.log("Connected to MongoDB");
     }
     
-    // For Vercel, we need to export the app without listening
-    // Vercel will handle the listening
+    // Start the server
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+    
     console.log("Server configured successfully");
   } catch (error) {
-    console.log(`${error} did not connect`);
+    console.log("MongoDB connection error:", error);
   }
 };
 
