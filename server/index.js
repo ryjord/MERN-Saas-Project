@@ -62,6 +62,14 @@ app.get("/api/test", (req, res) => {
   });
 });
 
+// Add this to your index.js for better debugging
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+  console.log('Origin:', req.headers.origin);
+  console.log('User-Agent:', req.headers['user-agent']);
+  next();
+});
+
 // Mongoose Setup
 const PORT = process.env.PORT || 9000;
 

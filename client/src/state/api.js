@@ -1,10 +1,21 @@
-// Imports
+// api.js - UPDATED VERSION
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-// API slice
+// Dynamic base URL configuration
+const getBaseUrl = () => {
+  // Use environment variable if available, otherwise fallback to production URL
+  return process.env.REACT_APP_API_URL || "https://mern-saas-project.vercel.app";
+};
+
 export const api = createApi({
   baseQuery: fetchBaseQuery({ 
-    baseUrl: "https://mern-saas-project.vercel.app"  // Hardcoded for now
+    baseUrl: getBaseUrl(),
+    prepareHeaders: (headers) => {
+      // Add any required headers here
+      headers.set('Content-Type', 'application/json');
+      return headers;
+    },
+    credentials: 'include', // If you're using cookies/auth
   }),
   reducerPath: "adminApi",
   tagTypes: [
@@ -19,7 +30,6 @@ export const api = createApi({
     "Dashboard",
   ],
 
-  // Endpoints
   endpoints: (build) => ({
     getUser: build.query({
       query: (id) => `general/user/${id}`,
@@ -64,7 +74,6 @@ export const api = createApi({
   }),
 });
 
-// Export hooks for usage in functional components
 export const {
   useGetUserQuery,
   useGetProductsQuery,
