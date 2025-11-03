@@ -1,6 +1,6 @@
 // ApiTestComponent.jsx
 import React, { useEffect } from 'react';
-import { useGetProductsQuery } from './path-to-your-api-file';
+import { useGetProductsQuery } from './api';
 
 const ApiTestComponent = () => {
   const { data, error, isLoading, isSuccess, isError } = useGetProductsQuery();
