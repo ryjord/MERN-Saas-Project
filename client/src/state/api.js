@@ -3,7 +3,9 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 // API slice
 export const api = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_BASE_URL || "" }),
+  baseQuery: fetchBaseQuery({ 
+    baseUrl: "https://mern-saas-project.vercel.app"  // Hardcoded for now
+  }),
   reducerPath: "adminApi",
   tagTypes: [
     "User",
