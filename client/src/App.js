@@ -21,7 +21,6 @@ import Admin from "scenes/admin";
 import Performance from "scenes/performance";
 
 // debug
-import ApiTestComponent from "state/ApiTestComponent";
 
 // App component
 function App() {
@@ -49,7 +48,6 @@ function App() {
               <Route path="/breakdown" element={<Breakdown />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/performance" element={<Performance />} />
-              <Route path="/api-test" element={<ApiTestComponent />} />
             </Route>
           </Routes>
         </ThemeProvider>
